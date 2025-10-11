@@ -1,0 +1,89 @@
+# =======================================
+# Carpetas generadas automáticamente
+# =======================================
+alu_10_entradas/db/
+alu_10_entradas/incremental_db/
+alu_10_entradas/output_files/
+alu_10_entradas/simulation/
+
+# =======================================
+# Archivos de proyecto temporales
+# =======================================
+*.bak
+*.rpt
+*.summary
+*.smsg
+*.done
+*.pin
+*.jdi
+*.jditmp
+*.log
+*.tmp
+*.qmsg
+*.cmp
+*.asm
+*.map
+*.fit
+*.sta
+*.pof
+*.sof
+*.pof
+*.jic
+*.hif
+*.ddb
+*.sdc.log
+*.csv
+*.eqn
+*.tan
+*.qws
+*.txt
+*.html
+*.rdb
+*.cdb
+*.hdb
+*.kpt
+*.sig
+*.hbdb
+*.ammdb
+*.idb
+*.rpt
+*.rcfdb
+*.dfp
+*.rdp
+*.vpr
+*.tsc
+*.sta_cmp.*
+
+# =======================================
+# Archivos de simulación (Questa/ModelSim)
+# =======================================
+*.svo
+*.sft
+*.wlf
+*.vcd
+*.mti
+*.vstf
+transcript
+vsim.wlf
+work/
+
+# =======================================
+# Archivos del sistema / IDE
+# =======================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# =======================================
+# Backups / temporales del usuario
+# =======================================
+*~
+*.swp
+*.old
+
+# =======================================
+# Ignorar archivos de pinout generados automáticamente
+# =======================================
+*c5_pin_model_dump.txt
