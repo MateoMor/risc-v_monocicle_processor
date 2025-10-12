@@ -22,3 +22,8 @@ vvp alu_tb.out
 ## FPGA Flow
 
 To deploy the design to hardware, open the project in Intel Quartus with `alu.qpf`. Configure options and pin assignments in `alu.qsf`, run synthesis, and program the target FPGA.
+
+## Acknowledgments
+Based on "Arquitectura de Computadoras con RISC-V" by Jaramillo Villegas et al., Universidad Tecnológica de Pereira.
+
+For further reading, see the official publication: [Arquitectura de Computadoras con RISC-V](https://repositorio.utp.edu.co/entities/publication/bef1bbae-3d4c-44ec-8cd1-f146f3a130ff) by Jaramillo Villegas et al., available through the Universidad Tecnológica de Pereira repository.
