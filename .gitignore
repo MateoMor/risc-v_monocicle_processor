@@ -1,13 +1,13 @@
 # =======================================
-# Carpetas generadas automáticamente
+# Folder ignore
 # =======================================
-alu_10_entradas/db/
-alu_10_entradas/incremental_db/
-alu_10_entradas/output_files/
-alu_10_entradas/simulation/
+**/db/
+**/incremental_db/
+**/output_files/
+**/simulation/
 
 # =======================================
-# Archivos de proyecto temporales
+# Temporal files
 # =======================================
 *.bak
 *.rpt
@@ -53,9 +53,10 @@ alu_10_entradas/simulation/
 *.vpr
 *.tsc
 *.sta_cmp.*
+*.out
 
 # =======================================
-# Archivos de simulación (Questa/ModelSim)
+# Simulation files quartus (Questa/ModelSim)
 # =======================================
 *.svo
 *.sft
@@ -68,7 +69,7 @@ vsim.wlf
 work/
 
 # =======================================
-# Archivos del sistema / IDE
+# System files
 # =======================================
 .DS_Store
 Thumbs.db
@@ -76,14 +77,8 @@ desktop.ini
 .vscode/
 .idea/
 
-# =======================================
-# Backups / temporales del usuario
-# =======================================
-*~
-*.swp
-*.old
 
 # =======================================
-# Ignorar archivos de pinout generados automáticamente
+# pinout generated automatically
 # =======================================
 *c5_pin_model_dump.txt
