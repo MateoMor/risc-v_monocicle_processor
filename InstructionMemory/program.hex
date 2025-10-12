@@ -1,0 +1,7 @@
+// Simple RISC-V program for testing InstructionMemory
+00000013 // addi x0, x0, 0   (NOP)
+00400093 // addi x1, x0, 4
+00c00113 // addi x2, x0, 12
+002081B3 // add  x3, x1, x2
+00312023 // sw   x3, 0(x2)
+00008067 // jalr x0, x1, 0 (return)
