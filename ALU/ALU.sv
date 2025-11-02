@@ -18,6 +18,7 @@ module ALU(
                 ALU_SRA = 4'b1101,
                 ALU_OR  = 4'b0110,
                 ALU_AND = 4'b0111;
+                ALU_PASS_B = 4'b1001;
 
     // It executes each time any input changes
     always @* begin
@@ -32,7 +33,7 @@ module ALU(
             ALU_SRA: ALURes = A >>> B; // SRA
             ALU_OR: ALURes = A | B; // OR
             ALU_AND: ALURes = A & B; // AND
-            4'b1001: ALURes = B;
+            ALU_PASS_B: ALURes = B;
         endcase
     end
 endmodule
