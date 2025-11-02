@@ -68,7 +68,7 @@ module ImmGen_tb;
         InmediateBits[23] = 1'b1; // ImmExt[10]
         InmediateBits[5] = 1'b1; // ImmExt[12]
         InmediateBits[13] = 1'b1; // ImmExt[11]
-        ImmSrc = 3'b011;
+        ImmSrc = 3'b110;
         #1;
         if (ImmExt !== 32'b00000000000000000001110100000000) begin
             $error("❌ J-type: ImmExt = %032b (esperado %032b)", ImmExt, 32'b00000000000000000001110100000000);

@@ -7,7 +7,7 @@ module ImmGen(
                S_TYPE = 3'b001,
                B_TYPE = 3'b101,
                U_TYPE = 3'b010,
-               J_TYPE = 3'b011;
+               J_TYPE = 3'b110;
 
     always @* begin
         case (ImmSrc)
