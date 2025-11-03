@@ -1,11 +1,15 @@
 `timescale 1ns/1ps
 
-module InstructionMemory_tb;
+module InstructionMemory_tb #(
+	parameter PROGRAM_FILE = "program.hex"
+);
 
 	logic [31:0] address;
 	logic [31:0] instruction;
 
-	InstructionMemory dut (
+	InstructionMemory #(
+		.PROGRAM_FILE(PROGRAM_FILE)
+	) dut (
 		.address(address),
 		.instruction(instruction)
 	);
