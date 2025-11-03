@@ -6,6 +6,7 @@ module InstructionMemory_tb #(
 
 	logic [31:0] address;
 	logic [31:0] instruction;
+	integer error_count;
 
 	InstructionMemory #(
 		.PROGRAM_FILE(PROGRAM_FILE)
@@ -14,52 +15,96 @@ module InstructionMemory_tb #(
 		.instruction(instruction)
 	);
 
-		localparam int TEST_CASE_COUNT = 5;
-		logic [31:0] test_addresses [0:TEST_CASE_COUNT-1];
-		logic [31:0] expected_instructions [0:TEST_CASE_COUNT-1];
+	// ========== TASK: Generic instruction test ==========
+	task test_instruction(
+		input string label,
+		input logic [31:0] test_addr,
+		input logic [31:0] expected_instr
+	);
+		begin
+			address = test_addr;
+			#1;
+			if (instruction !== expected_instr) begin
+				$error("❌ %s | PC=0x%08h -> 0x%08h (expected 0x%08h)", 
+					   label, test_addr, instruction, expected_instr);
+				error_count = error_count + 1;
+			end else begin
+				$display("✅ %s | PC=0x%08h -> 0x%08h", label, test_addr, instruction);
+			end
+		end
+	endtask
+
+	// ========== TASK: Out-of-bounds test ==========
+	task test_out_of_bounds(
+		input string label,
+		input logic [31:0] test_addr
+	);
+		begin
+			address = test_addr;
+			#1;
+			if (instruction !== 32'h0000_0013) begin
+				$error("❌ %s | PC=0x%08h -> 0x%08h (expected NOP 0x00000013)", 
+					   label, test_addr, instruction);
+				error_count = error_count + 1;
+			end else begin
+				$display("✅ %s | PC=0x%08h -> NOP (protection active)", label, test_addr);
+			end
+		end
+	endtask
+
+	// ========== TASK: Print section header ==========
+	task print_section(
+		input string title
+	);
+		begin
+			$display("\n========== %s ==========", title);
+		end
+	endtask
+
+	// ========== TASK: Print summary ==========
+	task print_summary;
+		begin
+			$display("\n╔════════════════════════════════════════╗");
+			$display("║              Test Summary              ║");
+			$display("╚════════════════════════════════════════╝");
+			$display("Total errors: %0d", error_count);
+			if (error_count == 0) begin
+				$display("✅ All tests passed successfully!");
+			end else begin
+				$display("❌ %0d test(s) failed!", error_count);
+			end
+		end
+	endtask
 
 	initial begin
 		$dumpfile("instruction_memory_tb.vcd");
 		$dumpvars(0, InstructionMemory_tb);
 
-			test_addresses[0] = 32'h0000_0000; expected_instructions[0] = 32'h0000_0013; // NOP
-			test_addresses[1] = 32'h0000_0004; expected_instructions[1] = 32'h0040_0093; // addi x1, x0, 4
-			test_addresses[2] = 32'h0000_0008; expected_instructions[2] = 32'h00C0_0113; // addi x2, x0, 12
-			test_addresses[3] = 32'h0000_000C; expected_instructions[3] = 32'h0020_81B3; // add  x3, x1, x2
-			test_addresses[4] = 32'h0000_0010; expected_instructions[4] = 32'h0031_2023; // sw   x3, 0(x2)
+		error_count = 0;
 
-		// Asegurarse de que la memoria se cargó antes de aplicar direcciones
-		#1;
+		print_section("Basic instruction tests");
+		test_instruction("NOP", 32'h0000_0000, 32'h0000_0013);
+		test_instruction("ADDI x1, x0, 4", 32'h0000_0004, 32'h0040_0093);
+		test_instruction("ADDI x2, x0, 12", 32'h0000_0008, 32'h00C0_0113);
+		test_instruction("ADD x3, x1, x2", 32'h0000_000C, 32'h0020_81B3);
+		test_instruction("SW x3, 0(x2)", 32'h0000_0010, 32'h0031_2023);
 
-		for (int i = 0; i < TEST_CASE_COUNT; i++) begin
-				address = test_addresses[i]; // Change address to see if the instruction is loaded
-			#1;
-				if (instruction !== expected_instructions[i]) begin
-				$error("❌ PC=0x%08h -> 0x%08h (esperado 0x%08h)",
-								 address, instruction, expected_instructions[i]);
-			end else begin
-				$display("✅ PC=0x%08h -> instrucción 0x%08h", address, instruction);
-			end
-		end
+		print_section("Misaligned address test");
+		test_instruction("Misaligned address", 32'h0000_0003, 32'h0000_0013);
 
-		// Probar dirección desalineada y la siguiente palabra
-		address = 32'h0000_0003;
-		#1;
-        if (instruction !== 32'h0000_0013) begin
-            $error("❌ Dirección desalineada PC=0x00000003 -> 0x%08h (esperado 0x00000013)", instruction);
-        end
-        else
-            $display("✅ Dirección desalineada PC=0x00000003 -> instrucción 0x%08h", instruction);
+		print_section("End-of-program test");
+		test_instruction("Last instruction (JALR)", 32'h0000_0014, 32'h0000_8067);
 
-		address = 32'h0000_0014; // load the last word in the file + 4 bytes
-		#1;
+		print_section("Out-of-bounds access tests");
+		test_out_of_bounds("First out-of-bounds (low)", 32'h0000_0200);
+		test_out_of_bounds("Very high address", 32'h7FFF_FFFC);
+		test_out_of_bounds("Maximum 32-bit address", 32'hFFFF_FFFC);
+		test_out_of_bounds("Just-beyond-boundary", 32'h0000_0200);
 
-		// Asegurarse de que la instrucción final concuerda con el archivo
-		if (instruction !== 32'h0000_8067) begin
-			$error("❌ PC=0x00000014 -> 0x%08h (esperado 0x00008067)", instruction);
-		end
-        else
-            $display("✅ PC=0x00000014 -> instrucción 0x%08h", instruction);
+		print_section("Boundary test");
+		test_instruction("Last valid address (127*4)", 32'h0000_01FC, 32'h0000_0013);
+
+		print_summary;
 
 		#2;
 		$finish;
