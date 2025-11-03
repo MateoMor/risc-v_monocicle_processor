@@ -17,7 +17,7 @@ module ALU(
                 ALU_SRL = 4'b0101,
                 ALU_SRA = 4'b1101,
                 ALU_OR  = 4'b0110,
-                ALU_AND = 4'b0111;
+                ALU_AND = 4'b0111,
                 ALU_PASS_B = 4'b1001;
 
     // It executes each time any input changes

@@ -1,4 +1,4 @@
-module NextPC(
+module RUDataWr(
     input logic [1:0]   RUDataWrSrc,
     input logic [31:0]  PC_with_offset,
     input logic [31:0]  DataRd,

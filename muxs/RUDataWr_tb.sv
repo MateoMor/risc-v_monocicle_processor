@@ -8,7 +8,7 @@ module RUDataWr_tb;
     logic [31:0] ALURes;
     logic [31:0] DataWr;
 
-    NextPC dut (
+    RUDataWr dut (
         .RUDataWrSrc(RUDataWrSrc),
         .PC_with_offset(PC_with_offset),
         .DataRd(DataRd),
