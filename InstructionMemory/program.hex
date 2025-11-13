@@ -4,4 +4,4 @@
 00c00113 // addi x2, x0, 12
 002081B3 // add  x3, x1, x2
 00312023 // sw   x3, 0(x2)
-00008067 // jalr x0, x1, 0 (return)
+00008067 // jalr x0, 0(x1) (return)

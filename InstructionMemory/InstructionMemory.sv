@@ -14,9 +14,10 @@ module InstructionMemory #(
             mem[i] = 32'h00000013;  // NOP: addi x0, x0, 0
         end
         
-        // Load the program from the hex file into memory (overwrites NOPs)
-        $readmemh(PROGRAM_FILE, mem);
-        
+        // Load the program from the file into memory (overwrites NOPs)
+        //$readmemh(PROGRAM_FILE, mem); // Hexadecimal format
+        $readmemb(PROGRAM_FILE, mem);  // Binary format
+
         // Display initialization information
         $display("✅ InstructionMemory initialized:");
         $display("   Size: %0d instructions (%0d bytes)", MEM_SIZE, MEM_SIZE*4);

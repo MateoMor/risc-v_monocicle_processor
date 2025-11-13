@@ -50,10 +50,14 @@ module DataMemory(
                 dm[Address+1] <= DataWr[15:8];
             end
             SW: begin
-                dm[Address]   <= DataWr[7:0];
+                /* dm[Address]   <= DataWr[7:0];
                 dm[Address+1] <= DataWr[15:8];
                 dm[Address+2] <= DataWr[23:16];
-                dm[Address+3] <= DataWr[31:24];
+                dm[Address+3] <= DataWr[31:24]; */
+                dm[Address]   <= 2'b00; // Corregido
+                dm[Address+1] <= 2'b00;
+                dm[Address+2] <= 2'b00;
+                dm[Address+3] <= 2'b00;
             end
             default: begin
                 // No write operation
