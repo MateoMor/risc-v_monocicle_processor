@@ -155,6 +155,7 @@ module RiscV_SingleCycle #(
     
     // Data Memory
     DataMemory dmem_inst (
+        .clk(clk), 
         .Address(ALURes),
         .DataWr(ru_rs2),
         .DMWr(DMWr),

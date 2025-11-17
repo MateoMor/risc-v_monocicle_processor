@@ -3,7 +3,7 @@
 
 echo "🔨 Compiling RISC-V Single Cycle Processor..."
 
-iverilog -g2012 -o riscv_sim \
+iverilog -g2012 -o riscv.out \
     RiscV_SingleCycle.sv \
     RiscV_SingleCycle_tb.sv \
     ProgramCounter/ProgramCounter.sv \
@@ -23,7 +23,7 @@ if [ $? -eq 0 ]; then
     echo "✅ Compilation successful"
     echo "▶️  Running simulation..."
     echo ""
-    vvp riscv_sim
+    vvp riscv.out
 else
     echo "❌ Compilation failed"
     exit 1

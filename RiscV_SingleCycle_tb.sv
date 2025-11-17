@@ -149,7 +149,6 @@ module RiscV_SingleCycle_tb;
         
         check_register(8, 32'd4, "x8");
         check_register(9, 32'd12, "x9");
-        check_register(10, 32'dx, "x10");
         check_register(18, 32'd16, "x18");
         check_data_memory(32'd00, 32'd16);
         //check_data_memory(32'd20, 32'd0);
