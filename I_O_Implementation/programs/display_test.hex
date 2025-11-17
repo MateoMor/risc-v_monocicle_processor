@@ -1,0 +1,19 @@
+# Test program: Write to 7-segment display
+# Writes the value 0xDEADBEEF to the display at address 0xFFFFFFFC
+
+# Initialize: x10 = 0xDEADBEEF (value to display)
+11011110101011011011111011101111  # lui x10, 0xDEADB
+11101110111101010001010000010011  # addi x10, x10, 0xEEF
+
+# Initialize: x11 = 0xFFFFFFFC (display address)
+11111111111111111111010111110111  # lui x11, 0xFFFFF
+11111111110001011000010110010011  # addi x11, x11, 0xFFC
+
+# Write to display: SW x10, 0(x11)
+00000000101001011010000000100011  # sw x10, 0(x11)
+
+# Read back from display: LW x12, 0(x11)
+00000000000001011010011000000011  # lw x12, 0(x11)
+
+# Infinite loop (halt)
+00000000000000000000000001101111  # jal x0, 0 (jump to self)
