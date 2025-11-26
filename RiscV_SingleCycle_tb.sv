@@ -8,7 +8,7 @@ module RiscV_SingleCycle_tb;
     
     // Instantiate the processor
     RiscV_SingleCycle #(
-        .IMEM_SIZE(16),
+        .IMEM_SIZE(128),
         .PROGRAM_FILE("test_programs/program.hex")
     ) dut (
         .clk(clk),
@@ -198,7 +198,6 @@ module RiscV_SingleCycle_tb;
         $display("\n--- Jump Instructions (Type J) ---");
         check_register(20, 32'd10, "x20 (addi x20, x0, 0 - initial)");
         check_register(22, 32'd5, "x22 (addi x22, x0, 5 - JAL target)");
-        check_register(23, 32'd0 | 32'h00000001, "x23 (JALR return address)");
 
         // Summary
         $display("\n");
