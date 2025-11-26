@@ -159,22 +159,40 @@ module RiscV_SingleCycle_tb;
         
         // Verificar instrucciones tipo B (Branch)
         $display("\n--- Branch Instructions (Type B) ---");
+        
+        // Verificar estado inicial
+        check_register(13, 32'd10, "x13 (initial value = 10)");
         check_register(11, 32'd4, "x11 (addi x11, x0, 4)");
         check_register(12, 32'd4, "x12 (addi x12, x0, 4)");
         
-        // Verificar que el branch se tomó (los NOPs se saltaron)
-        // Si el branch funcionó, x13, x14, x15 deberían tener sus valores
-        check_register(13, 32'd9, "x13 (addi x13, x0, 9) - after branch");
-        check_register(14, 32'd20, "x14 (addi x14, x0, 20)");
-        check_register(15, 32'd30, "x15 (addi x15, x0, 30)");
+        // Verificar que el branch se tomó correctamente
+        // Si BEQ funcionó:
+        //   - x11 == x12 (4 == 4) → condición verdadera
+        //   - Se toma el branch (salta 1 instrucción de 4 bytes = 8 bytes = offset 8)
+        //   - Se salta: addi x13, x0, 5
+        //   - Se ejecuta: addi x14, x0, 9
+        // 
+        // Verificación: x13 debe seguir siendo 10 (NO debe ser 5)
         
-        // Verificar que el PC saltó correctamente (debería haber saltado 3 instrucciones)
-        if (dut.reg_unit_inst.ru[13] == 32'd9) begin
-            $display("✅ BEQ instruction worked correctly - branch was taken!");
+        $display("\n🔍 Checking BEQ branch condition:");
+        $display("   x11 = %0d, x12 = %0d", dut.reg_unit_inst.ru[11], dut.reg_unit_inst.ru[12]);
+        $display("   Condition (x11 == x12): %s", (dut.reg_unit_inst.ru[11] == dut.reg_unit_inst.ru[12]) ? "TRUE" : "FALSE");
+        
+        if (dut.reg_unit_inst.ru[13] == 32'd10) begin
+            $display("✅ BEQ instruction worked correctly!");
+            $display("   x13 = 10 (instruction 'addi x13, x0, 5' was SKIPPED as expected)");
+        end else if (dut.reg_unit_inst.ru[13] == 32'd5) begin
+            $error("❌ BEQ instruction FAILED - branch was NOT taken");
+            $display("   x13 = 5 (instruction 'addi x13, x0, 5' was EXECUTED - should have been skipped)");
+            error_count = error_count + 1;
         end else begin
-            $error("❌ BEQ instruction failed - branch was NOT taken");
+            $error("❌ Unexpected value for x13 = %0d", dut.reg_unit_inst.ru[13]);
             error_count = error_count + 1;
         end
+        
+        // Verificar que las instrucciones después del branch se ejecutaron
+        check_register(15, 32'd20, "x15 (addi x15, x0, 20)");
+        check_register(16, 32'd30, "x16 (addi x16, x0, 30)");
 
         // Summary
         $display("\n");
