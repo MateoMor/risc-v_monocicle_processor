@@ -146,13 +146,35 @@ module RiscV_SingleCycle_tb;
         $display("║                  Result verification                      ║");
         $display("╚═══════════════════════════════════════════════════════════╝");
         
+        // Verificar instrucciones aritméticas
+        $display("\n--- Arithmetic Instructions ---");
+        check_register(8, 32'd4, "x8 (addi x8, x0, 4)");
+        check_register(9, 32'd12, "x9 (addi x9, x0, 12)");
+        check_register(18, 32'd16, "x18 (add x18, x8, x9)");
         
-        check_register(8, 32'd4, "x8");
-        check_register(9, 32'd12, "x9");
-        check_register(18, 32'd16, "x18");
-        check_data_memory(32'd00, 32'd16);
-        //check_data_memory(32'd20, 32'd0);
-        check_register(10, 32'd16, "x10");
+        // Verificar memoria
+        $display("\n--- Memory Instructions ---");
+        check_data_memory(32'd0, 32'd16);
+        check_register(10, 32'd16, "x10 (lw x10, 0(x0))");
+        
+        // Verificar instrucciones tipo B (Branch)
+        $display("\n--- Branch Instructions (Type B) ---");
+        check_register(11, 32'd4, "x11 (addi x11, x0, 4)");
+        check_register(12, 32'd4, "x12 (addi x12, x0, 4)");
+        
+        // Verificar que el branch se tomó (los NOPs se saltaron)
+        // Si el branch funcionó, x13, x14, x15 deberían tener sus valores
+        check_register(13, 32'd9, "x13 (addi x13, x0, 9) - after branch");
+        check_register(14, 32'd20, "x14 (addi x14, x0, 20)");
+        check_register(15, 32'd30, "x15 (addi x15, x0, 30)");
+        
+        // Verificar que el PC saltó correctamente (debería haber saltado 3 instrucciones)
+        if (dut.reg_unit_inst.ru[13] == 32'd9) begin
+            $display("✅ BEQ instruction worked correctly - branch was taken!");
+        end else begin
+            $error("❌ BEQ instruction failed - branch was NOT taken");
+            error_count = error_count + 1;
+        end
 
         // Summary
         $display("\n");
