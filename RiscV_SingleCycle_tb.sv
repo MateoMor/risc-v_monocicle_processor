@@ -194,6 +194,12 @@ module RiscV_SingleCycle_tb;
         check_register(15, 32'd20, "x15 (addi x15, x0, 20)");
         check_register(16, 32'd30, "x16 (addi x16, x0, 30)");
 
+        // Verificar instrucciones tipo J (Jump)
+        $display("\n--- Jump Instructions (Type J) ---");
+        check_register(20, 32'd10, "x20 (addi x20, x0, 0 - initial)");
+        check_register(22, 32'd5, "x22 (addi x22, x0, 5 - JAL target)");
+        check_register(23, 32'd0 | 32'h00000001, "x23 (JALR return address)");
+
         // Summary
         $display("\n");
         $display("╔═══════════════════════════════════════════════════════════╗");
