@@ -18,7 +18,7 @@
  */
 module RiscV_SingleCycle_FPGA #(
     parameter IMEM_SIZE = 128,
-    parameter PROGRAM_FILE = "test_programs/program.hex"
+    parameter PROGRAM_FILE = "C:/Users/Mateo/Desktop/UTP/SemesterVI/arquitectura/risc-v_single_cycle_processor/test_programs/program.hex"
 )(
     input logic clk,
     input logic reset,
@@ -30,7 +30,10 @@ module RiscV_SingleCycle_FPGA #(
     output logic [6:0] HEX2,  // Nibble [11:8]
     output logic [6:0] HEX3,  // Nibble [15:12]
     output logic [6:0] HEX4,  // Nibble [19:16]
-    output logic [6:0] HEX5   // Nibble [23:20]
+    output logic [6:0] HEX5,  // Nibble [23:20]
+    
+    // Debug ports (para testbench)
+    output logic [31:0] debug_selected_register
 );
 
     // ========== Dirección Memory-Mapped del Display ==========
@@ -244,8 +247,19 @@ module RiscV_SingleCycle_FPGA #(
     
     // ========== Display Controller ==========
     // Muestra el registro seleccionado por los switches SW[4:0]
+    // DisplayController ahora solo recibe 24 bits para 6 displays
+    
+    // Limpiar valores 'x' en los 24 bits inferiores antes de mostrar
+    logic [23:0] clean_register_display;
+    genvar i;
+    generate
+        for (i = 0; i < 24; i = i + 1) begin : clean_display_bits
+            assign clean_register_display[i] = (selected_register[i] === 1'bx) ? 1'b0 : selected_register[i];
+        end
+    endgenerate
+    
     DisplayController display_ctrl (
-        .data_to_display(selected_register[23:0]),  // Mostrar 24 bits del registro seleccionado
+        .data_to_display(clean_register_display),  // Pasar valor limpio sin 'x'
         .hex0(HEX0),
         .hex1(HEX1),
         .hex2(HEX2),
@@ -253,5 +267,9 @@ module RiscV_SingleCycle_FPGA #(
         .hex4(HEX4),
         .hex5(HEX5)
     );
+    
+    // ========== Debug Ports ==========
+    // Exponer selected_register para verificación en testbench
+    assign debug_selected_register = selected_register;
 
 endmodule

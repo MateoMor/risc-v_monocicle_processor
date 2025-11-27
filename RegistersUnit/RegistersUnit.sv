@@ -14,8 +14,15 @@ module RegistersUnit(
     input logic [4:0] reg_select,
     output logic [31:0] reg_out
 );
-    // register matrix
+    // register matrix - inicializar todos a 0 para evitar valores 'x'
     logic [31:0] ru [31:0]; // 32 registers of 32 bits each
+
+    // Inicializar todos los registros a 0
+    initial begin
+        for (int i = 0; i < 32; i = i + 1) begin
+            ru[i] = 32'h0;
+        end
+    end
 
     // lecturas con forwarding y x0 forzado a 0
     assign ru_rs1 = (rs1 == 0) ? 32'd0 :
