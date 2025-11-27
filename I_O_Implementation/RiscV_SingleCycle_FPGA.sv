@@ -18,7 +18,7 @@
  */
 module RiscV_SingleCycle_FPGA #(
     parameter IMEM_SIZE = 128,
-    parameter PROGRAM_FILE = "C:/Users/Mateo/Desktop/UTP/SemesterVI/arquitectura/risc-v_single_cycle_processor/test_programs/program.hex"
+    parameter PROGRAM_FILE = "../test_programs/program.hex"
 )(
     input logic clk,
     input logic reset,
