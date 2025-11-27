@@ -238,7 +238,7 @@ module RiscV_SingleCycle_FPGA_tb;
         $display("║              Scanning All 32 Registers                    ║");
         $display("║          Verifying both Displays and selected_register    ║");
         $display("╚═══════════════════════════════════════════════════════════╝");
-        
+        #500
         for (int i = 0; i < 32; i = i + 1) begin
             SW = i[4:0];
             #50;
